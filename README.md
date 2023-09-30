@@ -6,7 +6,7 @@ Escreva um ou dois parágrafos resumindo o objetivo do seu projeto.
 
 * Alexandre França Quirino dos Santos
 * Samuel Rodrigues Cardilo Van Petten
-* Nome completo do aluno 3
+* Diego Henrique de Toledo
 * Nome completo do aluno 4
 * Nome completo do aluno 4
 * Nome completo do aluno 4
