@@ -10,7 +10,7 @@ public class Veiculo {
     public Veiculo(String placa, double tanqueMax) {
         this.placa = placa;
         this.tanqueMax = tanqueMax;
-        this.rotas = new Rota[100]; // Você pode ajustar o tamanho do array conforme necessário
+        this.rotas = new Rota[100]; // Ajustar o tamanho do array conforme necessário
         this.quantRotas = 0;
         this.totalReabastecido = 0.0;
     }
@@ -30,7 +30,7 @@ public class Veiculo {
 
     public double autonomiaAtual() {
         // Implemente o cálculo da autonomia atual com base no tanque atual e consumoPorLitro()
-        return (tanqueMax - totalReabastecido) * consumoPorLitro(); // Suponhamos que consumoPorLitro() seja um método que você implementou
+        return (tanqueMax - totalReabastecido) * consumoPorLitro();
     }
 
     public double abastecer(double litros) {
@@ -44,12 +44,12 @@ public class Veiculo {
 
     public double kmNoMes() {
         // Implemente o cálculo da quilometragem percorrida no mês
-        // Suponhamos que você tenha um método para calcular a data atual e comparar com as datas das rotas
+        // Método para calcular a data atual e comparar com as datas das rotas
         return 0.0; // Valor de exemplo, você deve implementar essa lógica
     }
 
     public double kmTotal() {
-        // Implemente o cálculo da quilometragem total percorrida somando todas as rotas
+        // Implementar o cálculo da quilometragem total percorrida somando todas as rotas
         double kmTotal = 0.0;
         for (int i = 0; i < quantRotas; i++) {
             kmTotal += rotas[i].getQuilometragem();
@@ -58,7 +58,7 @@ public class Veiculo {
     }
 
     public void percorrerRota(Rota rota) {
-        // Implemente a lógica para percorrer uma rota
+        // Implementar a lógica para percorrer uma rota
         // Pode incluir a atualização da quilometragem, data, etc.
     }
 }
