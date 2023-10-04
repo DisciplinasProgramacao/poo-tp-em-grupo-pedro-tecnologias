@@ -24,8 +24,8 @@ public class Veiculo {
     }
 
     public double autonomiaMaxima() {
-        // Implemente o cálculo da autonomia máxima com base no tanqueMax
-        return tanqueMax * consumoPorLitro(); // Suponhamos que consumoPorLitro() seja um método que você implementou
+        // Implementar o cálculo da autonomia máxima com base no tanqueMax
+        return tanqueMax * consumoPorLitro();
     }
 
     public double autonomiaAtual() {
