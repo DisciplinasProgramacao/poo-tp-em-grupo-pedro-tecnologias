@@ -18,7 +18,7 @@ public class Rota {
     }
 
     public String relatorio() {
-        // Implemente a geração do relatório da rota
+        // Implementar a geração do relatório da rota
         // Pode incluir informações como quilometragem e data
         return "Quilometragem: " + quilometragem + ", Data: " + data;
     }
