@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Rota {
@@ -18,8 +19,11 @@ public class Rota {
     }
 
     public String relatorio() {
-        // Implementar a geração do relatório da rota
-        // Pode incluir informações como quilometragem e data
-        return "Quilometragem: " + quilometragem + ", Data: " + data;
+        StringBuilder aux = new StringBuilder("Relatório: ");
+        SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+        aux.append("Quilometragem: "+ quilometragem +" km, ");
+        aux.append("Data: "+ formatoData.format(data));
+
+        return aux.toString();
     }
 }
