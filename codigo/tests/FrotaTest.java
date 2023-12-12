@@ -13,10 +13,10 @@ public class FrotaTest {
     public void testRelatorioFrota() throws ParseException {
         Frota frota = new Frota();
 
-        Veiculo veiculo1 = new Veiculo("ABC123", 50.0, 30.0);
-        Veiculo veiculo2 = new Veiculo("XYZ789", 60.0, 40.0);
-        Veiculo veiculo3 = new Veiculo("DEF789", 60.0, 40.0);
-        Veiculo veiculo4 = new Veiculo("GHI789", 60.0, 40.0);
+        Veiculo veiculo1 = new Carro("ABC123", ECombustivel.ALCOOL);
+        Veiculo veiculo2 = new Van("XYZ789", ECombustivel.GASOLINA);
+        Veiculo veiculo3 = new Furgao("DEF789", ECombustivel.GASOLINA);
+        Veiculo veiculo4 = new Caminhao("GHI789", ECombustivel.DIESEL);
 
         String dataString = "01/01/2023";
         SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -24,20 +24,23 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.addRota(rota1);
+        veiculo1.abastecer(100);
+        veiculo2.abastecer(100);
+        veiculo3.abastecer(100);
+        veiculo4.abastecer(100);
+
         veiculo1.percorrerRota(rota1);
 
-        veiculo2.addRota(rota1);
+
         veiculo2.percorrerRota(rota1);
-        veiculo2.addRota(rota2);
-        veiculo2.percorrerRota(rota2);
-        veiculo2.addRota(rota2);
+
         veiculo2.percorrerRota(rota2);
 
-        veiculo3.addRota(rota2);
+        veiculo2.percorrerRota(rota2);
+
+
         veiculo3.percorrerRota(rota2);
 
-        veiculo4.addRota(rota2);
         veiculo4.percorrerRota(rota2);
 
         frota.adicionarVeiculo(veiculo1);
@@ -59,8 +62,8 @@ public class FrotaTest {
     @Test
     public void testLocalizarVeiculoExistente() {
         Frota frota = new Frota();
-        Veiculo veiculo1 = new Veiculo("ABC123", 55, 10);
-        Veiculo veiculo2 = new Veiculo("DEF456", 55, 15);
+        Veiculo veiculo1 = new Carro("ABC123", ECombustivel.ALCOOL);
+        Veiculo veiculo2 = new Van("XYZ789", ECombustivel.GASOLINA);
         frota.adicionarVeiculo(veiculo1);
         frota.adicionarVeiculo(veiculo2);
 
@@ -71,8 +74,8 @@ public class FrotaTest {
     @Test
     public void testLocalizarVeiculoNaoExistente() {
         Frota frota = new Frota();
-        Veiculo veiculo1 = new Veiculo("ABC123", 55, 10);
-        Veiculo veiculo2 = new Veiculo("DEF456", 50, 15);
+        Veiculo veiculo1 = new Carro("ABC123", ECombustivel.ALCOOL);
+        Veiculo veiculo2 = new Van("XYZ789", ECombustivel.GASOLINA);
         frota.adicionarVeiculo(veiculo1);
         frota.adicionarVeiculo(veiculo2);
 
@@ -83,8 +86,8 @@ public class FrotaTest {
     @Test
     public void testQuilometragemTotal() throws ParseException {
         Frota frota = new Frota();
-        Veiculo veiculo1 = new Veiculo("ABC123", 55, 10);
-        Veiculo veiculo2 = new Veiculo("DEF456", 50, 15);
+        Veiculo veiculo1 = new Carro("ABC123", ECombustivel.ALCOOL);
+        Veiculo veiculo2 = new Van("XYZ789", ECombustivel.GASOLINA);
 
         String dataString = "01/01/2023";
         SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -92,9 +95,9 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.addRota(rota1);
+        veiculo1.abastecer(100);
+        veiculo2.abastecer(100);
         veiculo1.percorrerRota(rota1);
-        veiculo2.addRota(rota2);
         veiculo2.percorrerRota(rota2);
         
         frota.adicionarVeiculo(veiculo1);
@@ -106,8 +109,9 @@ public class FrotaTest {
     @Test
     public void testMaiorKmTotal() throws ParseException {
         Frota frota = new Frota();
-        Veiculo veiculo1 = new Veiculo("ABC123", 55, 10);
-        Veiculo veiculo2 = new Veiculo("DEF456", 50, 15);
+        Veiculo veiculo1 = new Carro("ABC123", ECombustivel.ALCOOL);
+        Veiculo veiculo2 = new Van("XYZ789", ECombustivel.GASOLINA);
+
         frota.adicionarVeiculo(veiculo1);
         frota.adicionarVeiculo(veiculo2);
 
@@ -117,9 +121,9 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.addRota(rota1);
+        veiculo1.abastecer(100);
+        veiculo2.abastecer(100);
         veiculo1.percorrerRota(rota1);
-        veiculo2.addRota(rota2);
         veiculo2.percorrerRota(rota2);
 
         assertEquals(veiculo2, frota.maiorKmTotal());
@@ -128,8 +132,8 @@ public class FrotaTest {
     @Test
     public void testMaiorKmMedia() throws ParseException {
         Frota frota = new Frota();
-        Veiculo veiculo1 = new Veiculo("ABC123", 55, 10);
-        Veiculo veiculo2 = new Veiculo("DEF456", 50, 9);
+        Veiculo veiculo1 = new Furgao("DEF789", ECombustivel.GASOLINA);
+        Veiculo veiculo2 = new Caminhao("GHI789", ECombustivel.DIESEL);
         frota.adicionarVeiculo(veiculo1);
         frota.adicionarVeiculo(veiculo2);
 
@@ -139,9 +143,9 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.addRota(rota1);
+        veiculo1.abastecer(100);
+        veiculo2.abastecer(100);
         veiculo1.percorrerRota(rota1);
-        veiculo2.addRota(rota2);
         veiculo2.percorrerRota(rota2);
 
         assertEquals(veiculo2, frota.maiorKmMedia());
