@@ -75,7 +75,7 @@ public class Frota {
      */
     public Veiculo maiorKmMedia() {
         return veiculos.stream()
-            .max(Comparator.comparing(veiculo -> veiculo.kmTotal() / veiculo.getQuantRotasPercorridas()))
+            .max(Comparator.comparing(veiculo -> veiculo.kmTotal() / veiculo.qtdRotasPercorridas()))
             .orElse(null);
     }
 
