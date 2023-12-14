@@ -3,60 +3,81 @@
  */
 public class Tanque {
 
-    /* Atributos */
-    
-    private final double CONSUMO;
+    ECombustivel tipoCombustivel;
+    private double consumo;
     private double capacidadeMaxima; 
     private double capacidadeAtual;
-    private double precoMedioGasolina;
-    private double totalGastoGasolina;
-
-    /* Construtores */
+    private double totalAbastecido;
 
     /**
      * Construtor da classe `Tanque`.
      * @param capacidadeMaxima A capacidade máxima do tanque.
-     * @param CONSUMO O consumo do veículo (litros por quilômetro).
-     * @param precoMedioGasolina O preço médio da gasolina do veículo para calculo.
+     * @param consumo O consumo do veículo em (litros por quilômetro).
+     * @param precoCombustivel O preço médio do combustível do veículo para calculo.
      */
-    public Tanque(double capacidadeMaxima, double CONSUMO, double precoMedioGasolina){
-        this.capacidadeMaxima = capacidadeMaxima;
-        this.capacidadeAtual = 0;
-        this.CONSUMO = CONSUMO;
-        this.precoMedioGasolina = precoMedioGasolina;
-        totalGastoGasolina = 0;
-    }
+    public Tanque(EVeiculo tipoVeiculo, ECombustivel tipoCombustivel){
 
-    /* Métodos */
+        this.tipoCombustivel = tipoCombustivel;
+        consumo = tipoCombustivel.consumo;
+        capacidadeMaxima = tipoVeiculo.capacidadeMaximaTanque;
+        capacidadeAtual = 0;
+        totalAbastecido = 0;
+    }
 
     /**
      * Abastece o tanque com a quantidade especificada de litros.
      * @param litros A quantidade de litros a ser abastecida.
-     * @return A quantidade de litros realmente abastecida (pode ser menor se o tanque estiver cheio).
+     * @return A quantidade de litros realmente abastecida (retorna -1 caso litros não seja um número inteiro).
      */
     public double abastecer(double litros){
+        if (litros > 0) {        
+            double tanqueDisponivel = (capacidadeMaxima - capacidadeAtual);
 
-        double tanqueDisponivel = (capacidadeMaxima - capacidadeAtual);
+            if (litros <= tanqueDisponivel) {
+                
+                capacidadeAtual += litros;
+                totalAbastecido += litros;
+                return litros;
 
-        if (litros <= tanqueDisponivel) {
-            
-            capacidadeAtual += litros;
-            totalGastoGasolina += litros * precoMedioGasolina;
-            return litros;
-
-        }else if(tanqueDisponivel != 0){
-            capacidadeAtual = capacidadeMaxima;
-            return tanqueDisponivel;
+            }else if(tanqueDisponivel != 0){
+                capacidadeAtual = capacidadeMaxima;
+                totalAbastecido += tanqueDisponivel;
+                return tanqueDisponivel;
+            }
         }
-        return 0; 
+        return -1; 
+    }
+
+    /**
+     * O tanque é  gasto de acordo com a quantidade especificada de litros.
+     * @param litros A quantidade de litros a ser gasta.
+     * @return A quantidade de litros realmente gasta (retorna -1 caso litros não seja um número inteiro).
+     */
+    public double gastarCombustivel(double litros){
+
+        if(litros > 0){
+            if (litros <= capacidadeAtual) {
+                capacidadeAtual -=  litros;
+                return litros;
+            }else{
+                double litrosGastos = capacidadeAtual;
+                capacidadeAtual = 0;
+                return litrosGastos;
+            }
+        }
+         return -1;
+    }
+
+    public double valorGastoCombustivel(){
+        return totalAbastecido * tipoCombustivel.preco; 
     }
 
     /**
      * Calcula a autonomia máxima do veículo com base na capacidade máxima do tanque e no consumo.
      * @return A autonomia máxima em quilômetros.
      */
-    public double autonomiaMaxima(){
-        return capacidadeMaxima * CONSUMO;
+    private double autonomiaMaxima(){
+        return capacidadeMaxima * consumo;
 
     }
 
@@ -64,19 +85,9 @@ public class Tanque {
      * Calcula a autonomia atual do veículo com base na capacidade atual do tanque e no consumo.
      * @return A autonomia atual em quilômetros.
      */
-    public double autonomiaAtual(){
-        return capacidadeAtual * CONSUMO;
+    private double autonomiaAtual(){
+        return capacidadeAtual * consumo;
 
-    }
-
-    public boolean percorrerRota(Rota rota){
-        double quilometragem = rota.getQuilometragem();
-        boolean podePercorrer = autonomiaAtual() >= quilometragem;
-        if (podePercorrer) {
-            
-            this.capacidadeAtual = (capacidadeAtual - (quilometragem / CONSUMO));
-        }
-        return podePercorrer;
     }
 
     /**
@@ -88,12 +99,28 @@ public class Tanque {
         return capacidadeAtual;
     }
 
+    public double getConsumo(){
+        return consumo;
+    }
+
+    public double getTotalAbastecido(){
+        return totalAbastecido;
+    }
+
     /**
-     * Obtém a capacidade atual do tanque.
-     * @return A capacidade atual do tanque.
+     * Obtém a autonomia máxima do tanque.
+     * @return autonomia máxima.
      */
-    public double getTotalGastoGasolina(){
-        return totalGastoGasolina;
+    public double getAutonomiaMaxima(){
+        return autonomiaMaxima();
+    }
+
+    /**
+     * Obtém a autonomia atual do tanque.
+     * @return A autonomia atual do tanque.
+     */
+    public double getAutonomiaAtual(){
+        return autonomiaAtual();
     }
 
 }
