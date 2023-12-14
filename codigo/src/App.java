@@ -82,32 +82,6 @@ public class App {
         }
         return veiculo;
     }
-    
-    /**
-     * Abastece um veículo com base na placa inserida pelo usuário e na quantidade de litros.
-     */
-    private static void abastecerVeiculo() {
-
-        Veiculo veiculo = localizarVeiculoPorPlaca();
-        
-        try {
-            if (veiculo != null) {
-                System.out.println("Digite a quantidade de litros a abastecer:");
-                double litros = Double.parseDouble(teclado.nextLine());
-                
-                double litrosAbastecidos = veiculo.abastecer(litros);
-                if (litrosAbastecidos > 0) {
-                    System.out.println("Foram abastecidos "+ litrosAbastecidos +" litros");
-                }else{
-                    System.out.println("Não foi possível abastecer, tanque cheio.");
-                };
-            }
-            pausa();
-        }catch (NumberFormatException erro) {
-        System.out.println("Opção inválida.");
-        pausa();
-        }      
-    }
 
     /**
     * Exibe o relatório da frota na tela e pausa a execução do programa.
@@ -145,6 +119,36 @@ public class App {
         System.out.println("Opção inválida.");
         pausa();
         }      
+    }
+
+    private static void percorrerRota(){
+
+        Veiculo veiculo = localizarVeiculoPorPlaca(); 
+        if (veiculo != null) {           
+            
+            System.out.println("Digite a quilometragem da rota:");
+            double quilometragem = Double.parseDouble(teclado.nextLine());
+
+            System.out.println("Digite a data da rota (formato dd/MM/yyyy):");
+            String dataString = teclado.nextLine();
+
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            try{
+            Date data = formatoData.parse(dataString);  
+            Rota rota = new Rota(quilometragem, data); 
+
+            if (veiculo.percorrerRota(rota)) {
+                System.out.println("Rota percorrida com sucesso!");
+                pausa();
+            }else{
+                System.out.println("Não foi possível percorrer rota, km maior que autonomia do veículo");
+                pausa();
+            } 
+            }catch(ParseException erro){
+            System.out.println("Formato de data inválido. Rota não percorrida: "+erro);
+            pausa(); 
+            }  
+        }
     }
 
     /**
@@ -285,15 +289,15 @@ public class App {
         Veiculo veiculo2 = new Caminhao("ABC1234", ECombustivel.DIESEL);
         frota.adicionarVeiculo(veiculo1);
         frota.adicionarVeiculo(veiculo2);
+        Rota rota1 = new Rota(70d, new Date());
+        Rota rota2 = new Rota(170d, new Date());
+        Rota rota3 = new Rota(20d, new Date());
 
-        veiculo1.abastecer(40);
-        veiculo2.abastecer(60);
+        veiculo1.percorrerRota(rota1);
+        veiculo1.percorrerRota(rota3);
 
-        veiculo1.percorrerRota(50, new Date());
-        veiculo1.percorrerRota(70, new Date());
-
-        veiculo2.percorrerRota(100, new Date());
-        veiculo2.percorrerRota(50, new Date());
+        veiculo2.percorrerRota(rota3);
+        veiculo2.percorrerRota(rota2);
     }
 
     /**
@@ -309,8 +313,6 @@ public class App {
         gerarDadosParaExemplo();
         while(opcao!=0 || opcao==-1){
         try {
-                
-
                 opcao = menu(nomeArq);
                 switch(opcao){
                 case 1: {
@@ -333,44 +335,20 @@ public class App {
                             }
                         }    
                     }
-                    
                 }break;
                 case 2: {
                     limparTela();
-                    abastecerVeiculo();
+                    percorrerRota();                               
                 }break;
                 case 3: {
                     limparTela();
-                    Veiculo veiculo = localizarVeiculoPorPlaca(); 
-                    try{       
-                        System.out.println("Digite a quilometragem da rota:");
-                        double quilometragem = Double.parseDouble(teclado.nextLine());
-
-                        System.out.println("Digite a data da rota (formato dd/MM/yyyy):");
-                        String dataString = teclado.next();
-                        SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-                        
-                        Date data = formatoData.parse(dataString);     
-                        if (veiculo != null) {
-                            veiculo.percorrerRota(quilometragem, data);
-                            
-                            System.out.println("Rota percorrida com sucesso!");
-                        }
-            
-                    }catch(ParseException erro){
-                        System.out.println("Formato de data inválido. Rota não percorrida: "+erro);
-                        pausa();
-                    }  
-                }break;
-                case 4: {
-                    limparTela();
                     relatorioFrota();
                 }break;
-                case 5:{
+                case 4:{
                     limparTela();
                     iniciarNovoMes();
                 }break;
-                case 6:{
+                case 5:{
                     limparTela();
                     Veiculo veiculo = localizarVeiculoPorPlaca();
                     if (veiculo != null) {
@@ -378,7 +356,7 @@ public class App {
                         pausa();
                     }
                 }break;
-                case 7:{
+                case 6:{
                     limparTela();
                     realizarManutencao();
                 }break;
