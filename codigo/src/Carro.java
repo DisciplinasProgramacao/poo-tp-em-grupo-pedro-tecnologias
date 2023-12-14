@@ -7,6 +7,6 @@ public class Carro extends Veiculo {
      */
     public Carro(String placa, ECombustivel combustivel) {
         // Chama o construtor da classe pai (Veiculo) passando as informações específicas para inicializar um carro.
-        super(EVeiculo.CARRO, placa, combustivel);
+        super(placa, EVeiculo.CARRO,combustivel);
     }
 }
