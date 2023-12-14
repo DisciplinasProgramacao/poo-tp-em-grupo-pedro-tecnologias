@@ -1,21 +1,21 @@
 /**
- * Enumeração `ECombustivel` representa os tipos de combustíveis disponíveis, cada um com seu consumo médio e preço médio.
+ * Enumeração `ECombustivel` representa os tipos de combustíveis disponíveis, cada um com seu consumo e preço.
  */
 enum ECombustivel {
     ALCOOL(7d, 3.29),
     GASOLINA(10d, 5.19),
     DIESEL(4d, 6.09);
 
-    double consumoMedio;
-    double precoMedio;
+    double consumo;
+    double preco;
 
     /**
      * Construtor da enumeração `ECombustivel`.
-     * @param consumoMedio O consumo médio do combustível.
-     * @param precoMedio O preço médio do combustível.
+     * @param consumo O consumo do combustível.
+     * @param preco O preço do combustível.
      */
-    ECombustivel(double consumoMedio, double precoMedio) {
-        this.precoMedio = precoMedio;
-        this.consumoMedio = consumoMedio;
+    ECombustivel(double consumo, double preco) {
+        this.preco = preco;
+        this.consumo = consumo;
     }
 }
