@@ -22,12 +22,7 @@ public class FrotaTest {
         SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
         Date dataEsperada = formatoData.parse(dataString);
         Rota rota1 = new Rota(43, dataEsperada);
-        Rota rota2 = new Rota(80, dataEsperada);
-
-        veiculo1.abastecer(100);
-        veiculo2.abastecer(100);
-        veiculo3.abastecer(100);
-        veiculo4.abastecer(100);
+        Rota rota2 = new Rota(80, dataEsperada);    
 
         veiculo1.percorrerRota(rota1);
 
@@ -95,8 +90,6 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.abastecer(100);
-        veiculo2.abastecer(100);
         veiculo1.percorrerRota(rota1);
         veiculo2.percorrerRota(rota2);
         
@@ -121,8 +114,6 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.abastecer(100);
-        veiculo2.abastecer(100);
         veiculo1.percorrerRota(rota1);
         veiculo2.percorrerRota(rota2);
 
@@ -143,8 +134,6 @@ public class FrotaTest {
         Rota rota1 = new Rota(43, dataEsperada);
         Rota rota2 = new Rota(80, dataEsperada);
 
-        veiculo1.abastecer(100);
-        veiculo2.abastecer(100);
         veiculo1.percorrerRota(rota1);
         veiculo2.percorrerRota(rota2);
 
