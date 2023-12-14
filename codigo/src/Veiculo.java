@@ -1,24 +1,19 @@
 import java.util.List;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A classe abstrata `Veiculo` serve como base para outros tipos específicos de veículos, como Carro, Van, Furgão e Caminhão.
  */
 abstract class Veiculo {
 
-    private EVeiculo tipoVeiculo;
     private final int MAX_ROTAS = 30;
-    private double capacidadeMaxima;
+    private EVeiculo tipoVeiculo;
     private String placa;
     private List<Rota> rotasPercoridas;
-    private int quantRotas;
     Tanque tanque;
-    private double totalReabastecido;
     private double totalManutencoes;
 
     /**
@@ -27,52 +22,59 @@ abstract class Veiculo {
      * @param placa A placa do veículo.
      * @param combustivel O tipo de combustível utilizado pelo veículo.
      */
-    public Veiculo(EVeiculo tipoVeiculo, String placa, ECombustivel combustivel) {
+    public Veiculo(String placa, EVeiculo tipoVeiculo, ECombustivel combustivel) {
 
-        this.tipoVeiculo = tipoVeiculo;
-        capacidadeMaxima = tipoVeiculo.capacidadeMaximaTanque;
         this.placa = placa;
+        this.tipoVeiculo = tipoVeiculo;
         rotasPercoridas = new ArrayList<>();
-        quantRotas = 0;
-        tanque = new Tanque(capacidadeMaxima, combustivel.consumoMedio, combustivel.precoMedio);
-        totalReabastecido = 0;
+        tanque = new Tanque(tipoVeiculo, combustivel);
         totalManutencoes = 0;
 
     }
 
     public double totalGasto(){
-        return tanque.getTotalGastoGasolina() + totalManutencoes;
+        return tanque.valorGastoCombustivel() + totalManutencoes;
     }
 
     public void SomarManutencoes(double manutencoes){
         totalManutencoes += manutencoes;
     }
 
-    private double autonomiaMaxima() {
-        return tanque.autonomiaMaxima();
+    private double autonomiaAtual() {
+        return tanque.getAutonomiaAtual();
     }
-
-    private Rota addRota(double quilometragem, Date data) throws ParseException {
-
-        Rota rota = new Rota(quilometragem, data);
-        if (quantRotas < MAX_ROTAS && autonomiaMaxima() >= rota.getQuilometragem()) {
-            
-            quantRotas++;
-
-            return rota;
-        }
-        return rota;
+    private double autonomiaMaxima() {
+        return tanque.getAutonomiaMaxima();
     }
 
     /**
-     * Abastece o veículo com a quantidade especificada de litros.
-     * @param litros A quantidade de litros a ser abastecida.
-     * @return A quantidade de litros realmente abastecida (pode ser menor se o tanque estiver cheio).
+     * Percorre uma rota com base na quilometragem fornecida e adiciona na lista de rotas. 
+     * Caso não consiga percorrer por não ter autonomia abastece sozinho.
+     * @param kmRota A quilometragem da rota.
+     * @return `true` se a rota puder ser percorrida, `false` caso contrário.
      */
-    public double abastecer(double litros) {
-        double valorAbastecido = tanque.abastecer(litros);
-        totalReabastecido += valorAbastecido;
-        return valorAbastecido;
+    public boolean percorrerRota(Rota rota) {
+        double kmRota = rota.getQuilometragem();
+        double litros = kmRota / tanque.getConsumo();
+        if (kmRota <= autonomiaMaxima()) {
+            if (autonomiaAtual() >= kmRota) {
+                double litrosGastos = tanque.gastarCombustivel(litros);
+
+                if (litrosGastos >= 0 && qtdRotasPercorridas() < MAX_ROTAS) {   
+                        rotasPercoridas.add(rota);
+                        return true;              
+                } 
+            }
+            double litrosAbastecidos = tanque.abastecer(litros);
+            if (litrosAbastecidos > 0) {
+                return percorrerRota(rota);
+            }
+        }
+        return false;
+    }
+
+    public int qtdRotasPercorridas(){
+        return rotasPercoridas.size();
     }
 
     /**
@@ -105,38 +107,6 @@ abstract class Veiculo {
     }
 
     /**
-     * Percorre uma rota com base na quilometragem e data fornecidas.
-     * @param quilometragem A quilometragem da rota.
-     * @param data A data da rota.
-     * @return `true` se a rota puder ser percorrida, `false` caso contrário.
-     * @throws ParseException
-     */
-    public boolean percorrerRota(double quilometragem, Date data) throws ParseException {
-        
-        Rota rota = addRota(quilometragem, data);
-        if (tanque.percorrerRota(rota) && rota != null) {
-            rotasPercoridas.add(rota);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Percorre uma rota com base na quilometragem e data fornecidas.
-     * @param rota a rota a ser percorrida
-     * @return `true` se a rota puder ser percorrida, `false` caso contrário.
-     * @throws ParseException
-     */
-    public boolean percorrerRota(Rota rota) throws ParseException{
-        
-        if (tanque.percorrerRota(rota) && rota != null) {
-            rotasPercoridas.add(rota);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Verifica se a placa do veículo corresponde à placa fornecida.
      * @param placa A placa a ser verificada.
      * @return `true` se a placa corresponder, `false` caso contrário.
@@ -152,30 +122,6 @@ abstract class Veiculo {
         rotasPercoridas.clear();
     }
 
-    /**
-     * Obtém a quantidade total de rotas do veículo.
-     * @return A quantidade total de rotas.
-     */
-    public int getQuantRotas(){
-        return quantRotas;
-    }
-
-    /**
-     * Obtém a quantidade total de rotas percorridas pelo veículo.
-     * @return A quantidade total de rotas percorridas.
-     */
-    public int getQuantRotasPercorridas(){
-        return rotasPercoridas.size();
-    }
-
-    /**
-     * Obtém o tipo de veículo.
-     * @return O tipo de veículo.
-     */
-    public EVeiculo getTipoVeiculo() {
-        return tipoVeiculo;
-    }
-
     @Override
     public String toString(){
         NumberFormat moeda = NumberFormat.getCurrencyInstance();
@@ -183,13 +129,13 @@ abstract class Veiculo {
         StringBuilder aux = new StringBuilder();
         aux.append("\n=============== VEÍCULO ===============");
         aux.append("\nPlaca: "+ placa);
-        aux.append("\nTanque Maxímo: "+ formatarDouble.format(capacidadeMaxima) + " | Tanque Atual: "+ formatarDouble.format(tanque.getCapacidadeAtual()));
-        aux.append("\nTotal já abastecido: "+ formatarDouble.format(totalReabastecido));
+        aux.append("\nTanque Maxímo: "+ formatarDouble.format(tipoVeiculo.capacidadeMaximaTanque) + " | Tanque Atual: "+ formatarDouble.format(tanque.getCapacidadeAtual()));
+        aux.append("\nTotal já abastecido: "+ formatarDouble.format(tanque.getTotalAbastecido()));
         aux.append("\nRotas percorridas: "+ rotasPercoridas.size());
         aux.append("\nQuilometragem total: "+ formatarDouble.format(kmTotal()));
         aux.append("\nQuilometragem do mês: "+ formatarDouble.format(kmNoMes()));
-        aux.append("\nProxima manutenção periódica daqui a "+ (tipoVeiculo.manutencaoPeriodica - kmNoMes())+ " km");
-        aux.append("\nProxima troca de peças daqui a "+ (tipoVeiculo.manutencaoTrocaPecas - kmNoMes()) + " km");
+        aux.append("\nProxima manutenção periódica daqui a "+ (tipoVeiculo.manutencaoPeriodica - kmTotal())+ " km");
+        aux.append("\nProxima troca de peças daqui a "+ (tipoVeiculo.manutencaoTrocaPecas - kmTotal()) + " km");
         aux.append("\nDespeza total: "+ moeda.format(totalGasto()));
         aux.append("\n");
 
