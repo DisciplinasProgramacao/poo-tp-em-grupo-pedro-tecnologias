@@ -3,7 +3,7 @@
  * e valores de manutenção periódica e troca de peças.
  */
 enum EVeiculo {
-    CARRO(50d, 10000d, 10000d),
+    CARRO(50d, 200d, 10000d),
     VAN(60d, 10000d, 12000d),
     FURGAO(80d, 10000d, 12000d),
     CAMINHAO(250d, 20000d, 20000d);
